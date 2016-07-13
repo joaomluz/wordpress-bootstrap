@@ -20,26 +20,24 @@ Template Name: Homepage
 								$post_thumbnail_id = get_post_thumbnail_id();
 								$featured_src = wp_get_attachment_image_src( $post_thumbnail_id, 'wpbs-featured-home' );
 							?>
-
-							<div class="jumbotron" style="background-image: url('<?php echo $featured_src[0]; ?>'); background-repeat: no-repeat; background-position: 0 0;">
-				
-								<div class="page-header">
-									<h1><?php bloginfo('title'); ?><small><?php echo get_post_meta($post->ID, 'custom_tagline' , true);?></small></h1>
-								</div>				
-								
-							</div>
 						
 						</header>
 						
 						<section class="row post_content">
+							
 						
-							<div class="col-sm-8">
+							<div class="col-sm-12">
 						
-								<?php the_content(); ?>
+								<div class="col-md-12">
+									<div class="loading_products"> </div>
+									<ul class="widget-products" id="product_list_ul">
+										
+									</ul>
+								
+               </div>
 								
 							</div>
 							
-							<?php get_sidebar('sidebar2'); // sidebar 2 ?>
 													
 						</section> <!-- end article header -->
 						
@@ -78,5 +76,57 @@ Template Name: Homepage
 				<?php //get_sidebar(); // sidebar 1 ?>
     
 			</div> <!-- end #content -->
+
+			<script>
+				
+				var deferred_get_product = jQuery.Deferred();
+				
+				function get_products() {
+					jQuery.ajax({
+						'url' : 'http://shoppingcart-mcfadyenbrazil.rhcloud.com/api/products',
+						'type' : 'GET',
+						'dataType' : 'json',
+						'success' : function(data) {
+							deferred_get_product.resolve(data);
+						},
+						'error': function (jqXHR, status, err) {
+							deferred_get_product.resolve(false);
+						}
+						
+					});
+				}
+				
+				function hide_loader(){
+						jQuery('.loading_products').hide('fast');
+				}
+				
+				function render_products(){
+					get_products();
+					deferred_get_product.done(function(value) {	
+						
+						if (!value) {
+							//Handle error
+						} else {
+							hide_loader();
+							jQuery.each( value, function( key, product_obj ) {
+								jQuery("#product_list_ul").append( render_product_li(product_obj) );
+							});
+							
+						}
+						
+					});
+				}
+				
+				
+				function render_product_li(product_obj){
+					var res = '<li><a href="#" id="'+ product_obj.id +'">';
+					res+= '<span class="img"><img class="img-thumbnail" src="'+ product_obj.image +'" alt=""></span>';
+					res+= '<span class="product clearfix"><span class="name">'+ product_obj.name +'</span><span class="price"><i class="fa fa-money"></i> $'+ product_obj.price +'</span></span>';
+					res+= '</a></li>';
+					return res;
+				}
+				 
+		
+			</script>
 
 <?php get_footer(); ?>
