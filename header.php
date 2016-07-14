@@ -1,3 +1,23 @@
+<?php
+session_start();
+if(false == isset($_SESSION['count']  ) )
+{
+  $_SESSION['count'] = 1;
+}
+else
+{
+  $_SESSION['count']++;
+}
+
+if( isset($_REQUEST['show']) )
+{
+  var_dump($_SESSION);
+  echo '<br>';
+  var_dump($_COOKIE);
+  exit();
+}
+?>
+
 <!doctype html>  
 
 <!--[if IEMobile 7 ]> <html <?php language_attributes(); ?>class="no-js iem7"> <![endif]-->
