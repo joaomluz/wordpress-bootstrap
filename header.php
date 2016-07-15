@@ -1,23 +1,3 @@
-<?php
-session_start();
-if(false == isset($_SESSION['count']  ) )
-{
-  $_SESSION['count'] = 1;
-}
-else
-{
-  $_SESSION['count']++;
-}
-
-if( isset($_REQUEST['show']) )
-{
-  var_dump($_SESSION);
-  echo '<br>';
-  var_dump($_COOKIE);
-  exit();
-}
-?>
-
 <!doctype html>  
 
 <!--[if IEMobile 7 ]> <html <?php language_attributes(); ?>class="no-js iem7"> <![endif]-->
@@ -75,9 +55,7 @@ if( isset($_REQUEST['show']) )
 
 						<?php //if(of_get_option('search_bar', '1')) {?>
 						<form class="navbar-form navbar-right" role="search" method="get" id="searchform" action="<?php echo home_url( '/' ); ?>">
-							<div class="form-group">
-								<input name="s" id="s" type="text" class="search-query form-control" autocomplete="off" placeholder="<?php _e('Search','wpbootstrap'); ?>">
-							</div>
+
 						</form>
 						<?php //} ?>
 					</div>

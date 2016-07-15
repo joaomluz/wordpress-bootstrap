@@ -86,13 +86,20 @@ label {
 }
 .widget-products li .product>.name {
     display: block;
-    font-weight: 600;
+    font-size: 16px;
+    padding-left: 30px;
     padding-bottom: 7px;
 }
 .widget-products li .product {
     display: block;
     margin-left: 90px;
     margin-top: 19px;
+}
+.widget-products li .product-price {
+    display: block;
+    margin-top: 19px;
+      font-size: 18px;
+    font-weight: 600;
 }
 .widget-products li .img {
     display: block;
@@ -115,6 +122,8 @@ label {
 }
 .widget-products li {
     border-bottom: 1px solid #ebebeb;
+    height: 100px;
+
 }
 .widget-products {
     list-style: none;
@@ -220,3 +229,63 @@ label {
   margin-top: 19px;
 }
 
+.class-table-cart {
+  display:none;
+}
+
+.table>tbody>tr>td, .table>tfoot>tr>td{
+    vertical-align: middle;
+}
+.btn {
+  border: 0px solid;
+}
+@media screen and (max-width: 600px) {
+  table#cart tbody td .form-control{
+		width:20%;
+		display: inline !important;
+	}
+	.actions .btn{
+		width:36%;
+		margin:1.5em 0;
+	}
+	
+	.actions .btn-info{
+		float:left;
+	}
+	.actions .btn-danger{
+		float:right;
+	}
+	
+	table#cart thead { display: none; }
+	table#cart tbody td { display: block; padding: .6rem; min-width:320px;}
+	table#cart tbody tr td:first-child { color: #000000; }
+	table#cart tbody td:before {
+		content: attr(data-th); font-weight: bold;
+		display: inline-block; width: 8rem;
+	}
+	
+	
+	
+	table#cart tfoot td{display:block; }
+	table#cart tfoot td .btn{display:block;}
+  
+  .widget-products li .img {
+    display: block;
+    float: left;
+    text-align: center;
+    width: 50px;
+    height: 68px;
+    overflow: hidden;
+    margin-top: 7px;
+  }
+  
+  .widget-products li .product {
+    display: block;
+    margin-left: 40px;
+    margin-top: 19px;
+  }
+  .widget-products li button {
+    display: block;
+    margin-top: 50px;
+  }	
+}

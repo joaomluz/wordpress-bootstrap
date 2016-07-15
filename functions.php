@@ -582,11 +582,17 @@ if( !function_exists( "wp_bootstrap_theme_js" ) ) {
       get_template_directory_uri() . '/bower_components/modernizer/modernizr.js', 
       array('jquery'), 
       '1.2' );
+		
+		 wp_register_script( 'mcfadyen', 
+      get_template_directory_uri() . '/library/dist/js/mcfadyen.js', 
+      array('jquery'), 
+      '1.2' );
   
     wp_enqueue_script( 'bootstrap' );
     wp_enqueue_script( 'wpbs-js' );
     wp_enqueue_script( 'modernizr' );
-    
+   	wp_enqueue_script( 'mcfadyen' );
+
   }
 }
 add_action( 'wp_enqueue_scripts', 'wp_bootstrap_theme_js' );

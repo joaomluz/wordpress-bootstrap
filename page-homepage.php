@@ -6,16 +6,6 @@ Template Name: Homepage
 
 <?php get_header(); ?>
 
-<?php 
-
-$response = wp_remote_get( 'http://shoppingcart-mcfadyenbrazil.rhcloud.com/api/shoppingcart' );
-if( is_array($response) ) {
-  $header = $response['headers']; // array of http header lines
-  $body = $response['body']; // use the content
-	var_dump( $body );
-}
-
-?>
 			
 			<div id="content" class="clearfix row">
 			
@@ -89,101 +79,35 @@ if( is_array($response) ) {
 			</div> <!-- end #content -->
 
 			<script>
-				
-				var deferred_get_product = jQuery.Deferred();
-				
-				render_products();
 
-				function get_products() {
-					jQuery.ajax({
-						'url' : 'http://shoppingcart-mcfadyenbrazil.rhcloud.com/api/products',
-						'type' : 'GET',
-						'dataType' : 'json',
-						'success' : function(data) {
-							deferred_get_product.resolve(data);
-						},
-						'error': function (jqXHR, status, err) {
-							deferred_get_product.resolve(false);
-						}
-						
-					});
-				}
+				var items_in_cart;
+				get_cart();
 				
-				function hide_loader(){
-					jQuery('.loading_products').hide('fast');
-				}
-				
-				function render_products(){
-					get_products();
-					deferred_get_product.done(function(value) {	
-						
-						if (!value) {
-							//Handle error
-						} else {
-							hide_loader();
-							jQuery.each( value, function( key, product_obj ) {
-								jQuery("#product_list_ul").append( render_product_li(product_obj) );
-							});
-							
-						}
-						
-					});
-				}
-				
-				
-				function render_product_li(product_obj){
-					var res = '<li><div class="row"><div class="col-sm-4">';
-					res+= '<span class="img"><img class="img-thumbnail" src="'+ product_obj.image +'" alt=""></span>';
-					res+= '<span class="product clearfix"><span class="name">'+ product_obj.name +'</span><span class="price"><i class="fa fa-money"></i> $'+ product_obj.price +'</span></span>';
-					//res+= '</div><div class="col-sm-4"><form method="post" action="" id="ajax_form" class="form-inline" role="form"><input type="hidden" name="product_id" value="'+ product_obj.id +'" /><div class="form-group"><label for="quantity">Quantity:</label><input type="number" name="quantity" value="1" /> <button type="submit" class="btn btn-success">Add to cart</button></div></form>';
-					res+= '</div><div class="col-sm-4"><form method="post" action="" id="ajax_form" class="form-inline add-to-cart" role="form"><input type="hidden" name="product_id" value="'+ product_obj.id +'" /><div class="form-group"><input type="hidden" name="quantity" value="1" /> <button type="submit" class="btn btn-success">Add to cart</button></div></form>';
-					res+= '</a></div></div></li>';
-					return res;
-				}
-				 
-				function post_product(obj) {
-					
-					var values = jQuery(obj).serialize();
+				deferred_get_cart.done(function(value) {	
+					items_in_cart = value.items;
+					render_products();
+				});
 
-					jQuery.ajax({
-						'url' : 'http://shoppingcart-mcfadyenbrazil.rhcloud.com/api/shoppingcart/items',
-						'type' : 'POST',
-						'data' : values ,
-						'xhrFields' : {
-								withCredentials: true
-						},
-        		'success' : function (response, textStatus, jqXHR){
-							get_cart();
-						},
-						'error': function(jqXHR, textStatus, errorThrown) {
-							 console.log(textStatus, errorThrown);
-						}
-						
-					});
-				}
+				
 				
 				jQuery(document).on('click', '.add-to-cart', function(){
-						event.preventDefault();
-						post_product(this);
-				});
-				
-				
-				function get_cart() {
-					jQuery.ajax({
-						'url' : 'http://shoppingcart-mcfadyenbrazil.rhcloud.com/api/shoppingcart',
-						'type' : 'GET',
-						'xhrFields' : {
-								withCredentials: true
-						},
-						'success' : function(data) {
-							console.log(data);
-						},
-						'error': function (jqXHR, status, err) {
-							deferred_get_product.resolve(false);
+					event.preventDefault();
+					var id = jQuery(this).attr('data-product-id');
+					var already_in_cart = false;
+					
+					jQuery.each( items_in_cart, function( key, product ) {
+						if (product.product_id == id) {
+							already_in_cart = true;
 						}
-						
+
 					});
-				}
+					
+					if (!already_in_cart){
+						post_product(this);
+					} else {
+						window.open("/cart","_self");
+					}
+				});
 			</script>
 
 <?php get_footer(); ?>
